@@ -16,6 +16,14 @@ namespace ArithmeticCoding
             return cummulativeSums;
         }
 
+        public static void UpdateCummulativeSumsStartingFromIndex(List<int> sums, int startIndex, List<int> counts)
+        {
+            for (int i = startIndex + 1; i < sums.Count; i++)
+            {
+                sums[i] = sums[i - 1] + counts[i - 1]; 
+            }
+        }
+
         public static int GetCummulativeSumForIndex(List<int> counts, int index)
         {
             var cummulativeSum = 0;

@@ -10,7 +10,7 @@ namespace ArithmeticCoding.IntegrationTests
         private ArithmeticCoding arithmeticCoding;
 
         private List<int> alphabet = new List<int> { 97, 98, 99, 100, 101 };
-        private string fileContent = "abababacdaa";
+        private string fileContent = "abbababababaaccbaababc";
 
         private string inputFilePath = "inputFile.txt";
         private string outputFilePath = "outputFile.txt"; 
@@ -38,6 +38,19 @@ namespace ArithmeticCoding.IntegrationTests
         {
             File.WriteAllText(inputFilePath, fileContent);
 
+            arithmeticCoding.EncodeFile(inputFilePath, outputFilePath);
+            arithmeticCoding.DecodeFile(outputFilePath, decodedFilePath);
+
+            var decodedContent = File.ReadAllText(decodedFilePath);
+            Assert.AreEqual(fileContent, decodedContent);
+        }
+
+        [TestMethod]
+        public void TestThatWhenUsingCompleteAlphabetEncodedFileCanBeDecoded()
+        {
+            File.WriteAllText(inputFilePath, fileContent);
+
+            arithmeticCoding = new ArithmeticCoding(GetCompleteAlphabet());
             arithmeticCoding.EncodeFile(inputFilePath, outputFilePath);
             arithmeticCoding.DecodeFile(outputFilePath, decodedFilePath);
 

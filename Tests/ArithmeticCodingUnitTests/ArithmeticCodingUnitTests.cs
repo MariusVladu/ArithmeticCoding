@@ -25,7 +25,7 @@ namespace ArithmeticCodingUnitTests
 
             arithmeticCoding = new ArithmeticCoding.ArithmeticCoding(unorderedAlphabet);
 
-            arithmeticCoding.alphabet.Remove(alphabet.First());
+            arithmeticCoding.alphabet.Remove(alphabet.Last());
             CollectionAssert.AreEqual(expectedOrderedAlphabet, arithmeticCoding.alphabet);
         }
 
@@ -41,7 +41,7 @@ namespace ArithmeticCodingUnitTests
         public void TestThatConstructorAddsExpectedEndOfFileSymbolToTheEndOfAlphabet()
         {
             var expectedAlphabet = new List<int>(alphabet);
-            expectedAlphabet.Insert(0, 257);
+            expectedAlphabet.Add(alphabet.Last() + 1);
 
             arithmeticCoding = new ArithmeticCoding.ArithmeticCoding(alphabet);
 

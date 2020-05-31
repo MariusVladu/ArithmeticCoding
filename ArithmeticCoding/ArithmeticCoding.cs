@@ -33,7 +33,7 @@ namespace ArithmeticCoding
             this.alphabet = alphabet.OrderBy(x => x).ToList();
 
             endOfFileSymbol = this.alphabet.Last() + 1;
-            this.alphabet.Insert(0, endOfFileSymbol);
+            this.alphabet.Add(endOfFileSymbol);
 
             numberOfSymbols = this.alphabet.Count;
         }
@@ -183,25 +183,25 @@ namespace ArithmeticCoding
 
         public void FinishEncoding()
         {
-            underflowBits++;
+            //underflowBits++;
 
-            var bit = (uint)(Intervals.IsInTheFirstHalf(low) ? 0 : 1);
+            //var bit = (uint)(Intervals.IsInTheFirstHalf(low) ? 0 : 1);
 
-            bitWriter.WriteNBits(1, bit);
-            WriteUnderflowBits(~bit);
+            //bitWriter.WriteNBits(1, bit);
+            //WriteUnderflowBits(~bit);
 
-            //uint valueToWrite;
-            //if (Intervals.IsInTheFirstQuarter(low) && Intervals.IsInTheThirdQuarter(high))
-            //{
-            //    valueToWrite = 1;
-            //}
-            //else if (Intervals.IsInTheSecondQuarter(low) && Intervals.IsInTheForthQuarter(high))
-            //{
-            //    valueToWrite = 2;
-            //}
-            //else valueToWrite = 2;
+            uint valueToWrite;
+            if (Intervals.IsInTheFirstQuarter(low) && Intervals.IsInTheThirdQuarter(high))
+            {
+                valueToWrite = 1;
+            }
+            else if (Intervals.IsInTheSecondQuarter(low) && Intervals.IsInTheForthQuarter(high))
+            {
+                valueToWrite = 2;
+            }
+            else valueToWrite = 2;
 
-            //bitWriter.WriteNBits(2, valueToWrite);
+            bitWriter.WriteNBits(2, valueToWrite);
         }
 
         public void WriteUnderflowBits(uint bit)
@@ -226,7 +226,10 @@ namespace ArithmeticCoding
 
         public void UpdateModel(int symbolIndex)
         {
+            counts[symbolIndex]++;
 
+            ModelBuilding.UpdateCummulativeSumsStartingFromIndex(sums, symbolIndex, counts);
+            totalSum = sums[numberOfSymbols];
         }
 
         private void InitializeCodeWithTheFirst32Bits()
