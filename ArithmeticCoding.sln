@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArithmeticCodingUnitTests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArithmeticCoding.IntegrationTests", "Tests\ArithmeticCoding.IntegrationTests\ArithmeticCoding.IntegrationTests.csproj", "{43534B6A-5388-43AE-8206-56426F3B2D6A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleGUI", "SimpleGUI\SimpleGUI.csproj", "{2F018F7E-697A-4C00-92BB-C20CD8112DA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{43534B6A-5388-43AE-8206-56426F3B2D6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43534B6A-5388-43AE-8206-56426F3B2D6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43534B6A-5388-43AE-8206-56426F3B2D6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F018F7E-697A-4C00-92BB-C20CD8112DA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F018F7E-697A-4C00-92BB-C20CD8112DA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F018F7E-697A-4C00-92BB-C20CD8112DA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F018F7E-697A-4C00-92BB-C20CD8112DA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
