@@ -7,7 +7,8 @@ namespace ArithmeticCoding.IntegrationTests
     [TestClass]
     public class ArithmeticCodingIntegrationTests
     {
-        private ArithmeticCoding arithmeticCoding;
+        private Encoder encoder;
+        private Decoder decoder;
 
         private List<int> alphabet = new List<int> { 97, 98, 99, 100, 101 };
         private string fileContent = "abbababababaaccbaababc";
@@ -19,7 +20,8 @@ namespace ArithmeticCoding.IntegrationTests
         [TestInitialize]
         public void Setup()
         {
-            arithmeticCoding = new ArithmeticCoding(alphabet);
+            encoder = new Encoder(alphabet);
+            decoder = new Decoder(alphabet);
         }
 
         [TestMethod]
@@ -27,7 +29,7 @@ namespace ArithmeticCoding.IntegrationTests
         {
             File.WriteAllText(inputFilePath, fileContent);
 
-            arithmeticCoding.EncodeFile(inputFilePath, outputFilePath);
+            encoder.EncodeFile(inputFilePath, outputFilePath);
 
             var outputFileLength = new FileInfo(outputFilePath).Length;
             Assert.IsTrue(outputFileLength > 0);
@@ -38,8 +40,8 @@ namespace ArithmeticCoding.IntegrationTests
         {
             File.WriteAllText(inputFilePath, fileContent);
 
-            arithmeticCoding.EncodeFile(inputFilePath, outputFilePath);
-            arithmeticCoding.DecodeFile(outputFilePath, decodedFilePath);
+            encoder.EncodeFile(inputFilePath, outputFilePath);
+            decoder.DecodeFile(outputFilePath, decodedFilePath);
 
             var decodedContent = File.ReadAllText(decodedFilePath);
             Assert.AreEqual(fileContent, decodedContent);
@@ -48,11 +50,12 @@ namespace ArithmeticCoding.IntegrationTests
         [TestMethod]
         public void TestThatWhenUsingCompleteAlphabetEncodedFileCanBeDecoded()
         {
+            encoder = new Encoder(GetCompleteAlphabet());
+            decoder = new Decoder(GetCompleteAlphabet());
             File.WriteAllText(inputFilePath, fileContent);
 
-            arithmeticCoding = new ArithmeticCoding(GetCompleteAlphabet());
-            arithmeticCoding.EncodeFile(inputFilePath, outputFilePath);
-            arithmeticCoding.DecodeFile(outputFilePath, decodedFilePath);
+            encoder.EncodeFile(inputFilePath, outputFilePath);
+            decoder.DecodeFile(outputFilePath, decodedFilePath);
 
             var decodedContent = File.ReadAllText(decodedFilePath);
             Assert.AreEqual(fileContent, decodedContent);

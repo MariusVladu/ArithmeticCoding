@@ -11,5 +11,10 @@
         {
             return value & 2147483648;
         }
+
+        public static uint ShiftLeft1PositionAndFill(uint value, byte fillBit)
+        {
+            return (value << 1) + fillBit;
+        }
     }
 }
