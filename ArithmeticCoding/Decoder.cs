@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BitReaderWriter.Contracts;
+using System.Collections.Generic;
 using System.IO;
 
 namespace ArithmeticCoding
@@ -39,15 +40,39 @@ namespace ArithmeticCoding
             bitWriter.Dispose();
         }
 
+        public byte[] DecodeToArray(long bitsToRead, IBitReader bitReader)
+        {
+            this.bitsToRead = bitsToRead;
+            this.bitReader = bitReader;
+            InitializeModel();
+
+            InitializeCodeWithTheFirst32Bits();
+            var values = new List<byte>();
+
+            while (true)
+            {
+                var decodedSymbolIndex = DecodeNextSymbol();
+                var decodedSymbol = alphabet[decodedSymbolIndex];
+
+                if (decodedSymbol == endOfFileSymbol)
+                    break;
+
+                values.Add((byte)decodedSymbol);
+
+                UpdateModel(decodedSymbolIndex);
+            }
+
+            bitReader.Dispose();
+
+            return values.ToArray();
+        }
+
         private int DecodeNextSymbol()
         {
             range = (ulong)(high - low) + 1;
 
             var cummulativeSum = (uint)(((code - low + 1) * (ulong)totalSum - 1) / range);
             var symbolIndex = GetSymbolIndexByCummulativeSum(cummulativeSum, sums);
-
-            if (symbolIndex == alphabet.IndexOf(endOfFileSymbol))
-                return symbolIndex;
 
             high = GetHighForSymbol(symbolIndex);
             low = GetLowForSymbol(symbolIndex);
@@ -96,9 +121,8 @@ namespace ArithmeticCoding
 
         public uint ReadNextBit()
         {
-            if (bitsToRead > 0)
+            if (bitsToRead-- > 0)
             {
-                bitsToRead--;
                 return (uint)bitReader.ReadBit();
             }
 

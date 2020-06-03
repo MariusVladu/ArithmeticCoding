@@ -1,6 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using BitReaderWriter;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace ArithmeticCoding.IntegrationTests
 {
@@ -54,11 +57,49 @@ namespace ArithmeticCoding.IntegrationTests
             decoder = new Decoder(GetCompleteAlphabet());
             File.WriteAllText(inputFilePath, fileContent);
 
-            encoder.EncodeFile(inputFilePath, outputFilePath);
-            decoder.DecodeFile(outputFilePath, decodedFilePath);
+            encoder.EncodeFile("input.exe", outputFilePath);
+            decoder.DecodeFile(outputFilePath, "output.exe");
 
             var decodedContent = File.ReadAllText(decodedFilePath);
             Assert.AreEqual(fileContent, decodedContent);
+        }
+
+        [TestMethod]
+        public void TestThatArrayIsTheSameAfterEncodeAndDecode()
+        {
+            encoder = new Encoder(alphabet);
+            decoder = new Decoder(alphabet);
+            var array = fileContent.Select(x => (byte)x).ToArray();
+
+            encoder.EncodeArray(array, GetBitWriter(outputFilePath));
+            var bitsToRead = new FileInfo(outputFilePath).Length * 8;
+            var returnedArray = decoder.DecodeToArray(bitsToRead, GetBitReader(outputFilePath));
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                Assert.AreEqual(array[i], returnedArray[i]);
+            }
+
+            Assert.AreEqual(array.Length, returnedArray.Length);
+        }
+
+        [TestMethod]
+        public void TestThatRandomArrayIsTheSameAfterEncodeAndDecode()
+        {
+            encoder = new Encoder(GetCompleteAlphabet());
+            decoder = new Decoder(GetCompleteAlphabet());
+            var array = GetRandomArray(5000);
+
+            encoder.EncodeArray(array, GetBitWriter(outputFilePath));
+            var bitsToRead = new FileInfo(outputFilePath).Length * 8;
+            var returnedArray = decoder.DecodeToArray(bitsToRead, GetBitReader(outputFilePath));
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                Assert.AreEqual(array[i], returnedArray[i]);
+            }
+
+            Assert.AreEqual(array.Length, returnedArray.Length);
         }
 
         private List<int> GetCompleteAlphabet()
@@ -71,6 +112,29 @@ namespace ArithmeticCoding.IntegrationTests
             }
 
             return completeAlphabet;
+        }
+
+        private BitReader GetBitReader(string filePath)
+        {
+            var inputFileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            return new BitReader(inputFileStream);
+        }
+
+        private BitWriter GetBitWriter(string filePath)
+        {
+            var outputFileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
+            return new BitWriter(outputFileStream);
+        }
+
+        public static byte[] GetRandomArray(int length)
+        {
+            var array = new byte[length];
+            var random = new Random();
+
+            for (int i = 0; i < length; i++)
+                array[i] = (byte)random.Next(0, 256);
+
+            return array;
         }
     }
 }

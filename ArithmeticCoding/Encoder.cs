@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BitReaderWriter.Contracts;
+using System.Collections.Generic;
 using System.IO;
 
 namespace ArithmeticCoding
@@ -28,6 +29,26 @@ namespace ArithmeticCoding
             FinishEncoding();
 
             bitReader.Dispose();
+            bitWriter.Dispose();
+        }
+
+        public void EncodeArray(byte[] array, IBitWriter bitWriter)
+        {
+            this.bitWriter = bitWriter;
+            InitializeModel();
+
+            foreach(byte value in array)
+            {
+                var symbolIndex = MapSymbolToIndexInList(value, alphabet);
+
+                EncodeSymbol(symbolIndex);
+
+                UpdateModel(symbolIndex);
+            }
+
+            EncodeSymbol(MapSymbolToIndexInList(endOfFileSymbol, alphabet));
+            FinishEncoding();
+
             bitWriter.Dispose();
         }
 
@@ -85,9 +106,11 @@ namespace ArithmeticCoding
             {
                 valueToWrite = 2;
             }
-            else valueToWrite = 2;
+            else valueToWrite = 1;
 
-            bitWriter.WriteNBits(2, valueToWrite);
+            bitWriter.WriteNBits(1, valueToWrite >> 1);
+            WriteUnderflowBits(~(valueToWrite >> 1));
+            bitWriter.WriteNBits(1, valueToWrite & 1);
         }
 
         public int MapSymbolToIndexInList(int symbol, List<int> list)
