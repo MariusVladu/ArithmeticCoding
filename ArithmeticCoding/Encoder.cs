@@ -32,12 +32,12 @@ namespace ArithmeticCoding
             bitWriter.Dispose();
         }
 
-        public void EncodeArray(byte[] array, IBitWriter bitWriter)
+        public void EncodeArray(int[] array, IBitWriter bitWriter)
         {
             this.bitWriter = bitWriter;
             InitializeModel();
 
-            foreach(byte value in array)
+            foreach(var value in array)
             {
                 var symbolIndex = MapSymbolToIndexInList(value, alphabet);
 

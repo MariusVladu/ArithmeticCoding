@@ -57,8 +57,8 @@ namespace ArithmeticCoding.IntegrationTests
             decoder = new Decoder(GetCompleteAlphabet());
             File.WriteAllText(inputFilePath, fileContent);
 
-            encoder.EncodeFile("input.exe", outputFilePath);
-            decoder.DecodeFile(outputFilePath, "output.exe");
+            encoder.EncodeFile(inputFilePath, outputFilePath);
+            decoder.DecodeFile(outputFilePath, decodedFilePath);
 
             var decodedContent = File.ReadAllText(decodedFilePath);
             Assert.AreEqual(fileContent, decodedContent);
@@ -69,7 +69,7 @@ namespace ArithmeticCoding.IntegrationTests
         {
             encoder = new Encoder(alphabet);
             decoder = new Decoder(alphabet);
-            var array = fileContent.Select(x => (byte)x).ToArray();
+            var array = fileContent.Select(x => (int)x).ToArray();
 
             encoder.EncodeArray(array, GetBitWriter(outputFilePath));
             var bitsToRead = new FileInfo(outputFilePath).Length * 8;
@@ -106,7 +106,7 @@ namespace ArithmeticCoding.IntegrationTests
         {
             var completeAlphabet = new List<int>();
 
-            for (int i = 0; i < 256; i++)
+            for (int i = -256; i < 256; i++)
             {
                 completeAlphabet.Add(i);
             }
@@ -126,13 +126,13 @@ namespace ArithmeticCoding.IntegrationTests
             return new BitWriter(outputFileStream);
         }
 
-        public static byte[] GetRandomArray(int length)
+        public static int[] GetRandomArray(int length)
         {
-            var array = new byte[length];
+            var array = new int[length];
             var random = new Random();
 
             for (int i = 0; i < length; i++)
-                array[i] = (byte)random.Next(0, 256);
+                array[i] = random.Next(-256, 256);
 
             return array;
         }

@@ -40,14 +40,14 @@ namespace ArithmeticCoding
             bitWriter.Dispose();
         }
 
-        public byte[] DecodeToArray(long bitsToRead, IBitReader bitReader)
+        public int[] DecodeToArray(long bitsToRead, IBitReader bitReader)
         {
             this.bitsToRead = bitsToRead;
             this.bitReader = bitReader;
             InitializeModel();
 
             InitializeCodeWithTheFirst32Bits();
-            var values = new List<byte>();
+            var values = new List<int>();
 
             while (true)
             {
@@ -57,7 +57,7 @@ namespace ArithmeticCoding
                 if (decodedSymbol == endOfFileSymbol)
                     break;
 
-                values.Add((byte)decodedSymbol);
+                values.Add(decodedSymbol);
 
                 UpdateModel(decodedSymbolIndex);
             }
